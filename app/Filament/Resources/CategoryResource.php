@@ -41,10 +41,10 @@ class CategoryResource extends Resource
                 Tables\Columns\IconColumn::make('is_expense')
                     ->label('Transaction Type')
                     ->boolean()
-                    ->trueColor('danger')
-                    ->falseColor('success')
                     ->trueIcon('hugeicons-money-send-02')
-                    ->falseIcon('hugeicons-money-receive-02'),
+                    ->falseIcon('hugeicons-money-receive-02')
+                    ->trueColor('danger')
+                    ->falseColor('success'),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()

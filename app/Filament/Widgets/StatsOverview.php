@@ -88,20 +88,6 @@ class StatsOverview extends BaseWidget
                 ? 'heroicon-m-arrow-trending-down'
                 : 'heroicon-m-arrows-right-left');
 
-        // Perubahan saldo
-        // $previousBalance = $initialBalance + ($income - $expenseChange);
-        // $balanceChange = $balance - $previousBalance;
-        // $balanceDescription = $balanceChange > 0
-        //     ? 'Increase by ' . $formatCurrency(abs($balanceChange))
-        //     : ($balanceChange < 0
-        //         ? 'Decrease by ' . $formatCurrency(abs($balanceChange))
-        //         : 'No Change');
-        // $balanceIcon = $balanceChange > 0
-        //     ? 'heroicon-m-arrow-trending-up'
-        //     : ($balanceChange < 0
-        //         ? 'heroicon-m-arrow-trending-down'
-        //         : 'heroicon-m-arrows-right-left');
-
         return [
             Stat::make('Total Pemasukan', $formatCurrency($income))
                 ->description($incomeDescription)

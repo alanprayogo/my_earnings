@@ -59,7 +59,9 @@ class TransactionResource extends Resource
                     ->label('Transaction')
                     ->boolean()
                     ->trueIcon('hugeicons-money-send-02')
-                    ->falseIcon('hugeicons-money-receive-02'),
+                    ->falseIcon('hugeicons-money-receive-02')
+                    ->trueColor('danger')
+                    ->falseColor('success'),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
                     ->money('IDR')
