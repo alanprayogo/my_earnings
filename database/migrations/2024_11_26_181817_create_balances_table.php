@@ -11,14 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('current_balances', function (Blueprint $table) {
+        Schema::create('balances', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->decimal('balance', 15, 2);
+            $table->unsignedBigInteger('transaction_id')->nullable();
+            $table->decimal('current_balance', 15, 2)->default(0);
+            $table->decimal('previous_balance', 15, 2)->default(0);
             $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('transaction_id')->references('id')->on('transactions')->onDelete('cascade');
         });
     }
 
@@ -27,7 +30,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('current_balances');
+        Schema::dropIfExists('balances');
             $table->dropForeign('user_id');
+            $table->dropForeign('transaction_id');
     }
 };

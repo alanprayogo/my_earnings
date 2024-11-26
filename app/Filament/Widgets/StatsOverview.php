@@ -3,7 +3,7 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Transaction;
-use App\Models\CurrentBalance;
+use App\Models\Balance;
 use Illuminate\Support\Facades\DB;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
@@ -13,7 +13,7 @@ class StatsOverview extends BaseWidget
     protected function getStats(): array
     {
         $userId = auth()->id();
-        $initialBalance = CurrentBalance::where('user_id', $userId)->value('balance') ?? 0;
+        $initialBalance = Balance::where('user_id', $userId)->value('current_balance') ?? 0;
 
         // Total pemasukan dan pengeluaran
         $income = DB::table('transactions')

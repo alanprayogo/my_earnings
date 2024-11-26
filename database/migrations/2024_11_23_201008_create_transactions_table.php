@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('category_id');
-            $table->boolean('transaction_type');
+            $table->string('name');
             $table->decimal('amount', 15, 2 );
             $table->date('transaction_date');
             $table->softDeletes();

@@ -21,7 +21,7 @@ class TransactionResource extends Resource
 
     public static function form(Form $form): Form
     {
-        $isDisabled = !\DB::table('current_balances') // Balikkan logika dengan `!`
+        $isDisabled = !\DB::table('balances') // Balikkan logika dengan `!`
         ->where('user_id', auth()->id())
         ->exists();
 
@@ -111,9 +111,16 @@ class TransactionResource extends Resource
         ];
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return \DB::table('balances')
+            ->where('user_id', auth()->id())
+            ->exists();
+    }
+
     public static function beforeCreate($record)
     {
-        $hasTransaction = !\DB::table('current_balances')
+        $hasTransaction = !\DB::table('balances')
         ->where('user_id', auth()->id())
         ->exists();
 
@@ -124,10 +131,32 @@ class TransactionResource extends Resource
         $record->user_id = auth()->id();
     }
 
-    public static function shouldRegisterNavigation(): bool
+    protected function afterCreate($record): void
     {
-        return \DB::table('current_balances')
-            ->where('user_id', auth()->id())
-            ->exists();
+        $userId = $record->user_id;
+        $transactionName = $record->name;
+        $amount = $record->amount;
+
+        // Simpan transaksi
+        $transactionId = DB::table('transactions')->insertGetId([
+            'user_id' => $userId,
+            'name' => $transactionName,
+            'amount' => $amount,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        // Perbarui saldo
+        $currentBalance = DB::table('balances')->where('user_id', $userId)->first(); // Ganti nama tabel
+        $newBalance = $currentBalance->current_balance + $amount; // Penyesuaian sesuai jenis transaksi
+            DB::table('balances')->updateOrInsert( // Ganti nama tabel
+                ['user_id' => $userId],
+                [
+                    'transaction_id' => $transactionId,
+                    'previous_balance' => $currentBalance->current_balance,
+                    'current_balance' => $newBalance,
+                    'updated_at' => now(),
+                ]
+            );
     }
 }

@@ -54,7 +54,7 @@ class User extends Authenticatable
 
     public function balance()
     {
-        return $this->hasOne(CurrentBalance::class, 'user_id', 'id');
+        return $this->hasOne(Balance::class, 'user_id', 'id');
     }
 
 }

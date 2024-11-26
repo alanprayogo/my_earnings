@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class CurrentBalance extends Model
+class Balance extends Model
 {
     use HasFactory;
 
@@ -17,15 +17,19 @@ class CurrentBalance extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
+    public function transaction()
+    {
+        return $this->hasMany(Transaction::class, 'transaction_id', 'id');
+    }
+
     use SoftDeletes;
 
     protected static function booted()
     {
-        static::creating(function ($category) {
-            if (!$category->user_id) {
-                $category->user_id = auth()->id();
+        static::creating(function ($balance) {
+            if (!$balance->user_id) {
+                $balance->user_id = auth()->id();
             }
         });
     }
-
 }

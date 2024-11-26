@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\CurrentBalanceResource\Pages;
-use App\Filament\Resources\CurrentBalanceResource\RelationManagers;
-use App\Models\CurrentBalance;
+use App\Filament\Resources\BalanceResource\Pages;
+use App\Filament\Resources\BalanceResource\RelationManagers;
+use App\Models\Balance;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,9 +13,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class CurrentBalanceResource extends Resource
+class BalanceResource extends Resource
 {
-    protected static ?string $model = CurrentBalance::class;
+    protected static ?string $model = Balance::class;
 
     protected static ?string $navigationIcon = 'heroicon-m-banknotes';
 
@@ -23,10 +23,10 @@ class CurrentBalanceResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('balance')
+                Forms\Components\TextInput::make('current_balance')
                     ->required()
                     ->numeric()
-                    ->disabled(fn () => \DB::table('current_balances')
+                    ->disabled(fn () => \DB::table('balances')
                     ->where('user_id', auth()->id())
                     ->exists()
                 ),
@@ -40,7 +40,7 @@ class CurrentBalanceResource extends Resource
                 Tables\Columns\TextColumn::make('user_id')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('balance')
+                Tables\Columns\TextColumn::make('current_balance')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
@@ -75,13 +75,13 @@ class CurrentBalanceResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\CreateCurrentBalance::route('/'),
+            'index' => Pages\CreateBalance::route('/'),
         ];
     }
 
     public static function beforeCreate($record)
     {
-        $hasTransaction = \DB::table('current_balances')
+        $hasTransaction = \DB::table('balances')
         ->where('user_id', auth()->id())
         ->exists();
 
@@ -95,7 +95,7 @@ class CurrentBalanceResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return !\DB::table('current_balances')
+        return !\DB::table('balances')
             ->where('user_id', auth()->id())
             ->exists();
     }

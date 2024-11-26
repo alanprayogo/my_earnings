@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\TransactionResource\Pages;
 
-use App\Filament\Resources\TransactionResource;
 use Filament\Actions;
+use Illuminate\Support\Facades\DB;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\TransactionResource;
 
 class CreateTransaction extends CreateRecord
 {

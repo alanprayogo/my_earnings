@@ -22,6 +22,11 @@ class Transaction extends Model
         return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 
+    public function balance()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
     use SoftDeletes;
 
     protected static function booted()
